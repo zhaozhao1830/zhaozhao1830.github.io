@@ -8,6 +8,8 @@
 		<link rel="stylesheet" href="css/index.css" />
 		<script type="text/javascript" src="js/jquery-3.1.1.js" ></script>
 		<script type="text/javascript" src="js/bootstrap.js" ></script>
+		<script type="text/javascript" src="js/Mtween(transform).js" ></script>
+		<script src="js/dialog.js"></script>
 		<script type="text/javascript" src="js/index.js" ></script>
 	</head>
 	<body>
@@ -20,49 +22,51 @@
 				<!--header start-->
 				<!--navigation-->
 				<nav class="navbar navbar-default navbar-fixed-top">
-					<div class="container">
-						<div class="navbar-header page-scroll">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-								<span class="sr-only"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-							<h1>
-								<a class="navbar-brand" href="index.html">
-									Let's
-									<span>Party</span>
-								</a>
-							</h1>					
-						</div>
-						<!--导航栏-->
-						<div class="collapse navbar-collapse navbar-ex1-collapse">
-							<ul class="nav navbar-nav navbar-right">
-								<li class="active">
-									<a class="page-scroll" href="#home">Home</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#services">Services</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#staff">Our staff</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#gallery">Gallery</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#price">Prices</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#blog">Blog</a>
-								</li>
-								<li>
-									<a class="page-scroll" href="#contact">Contact</a>
-								</li>
-								<li class="w3ls-navlog">
-									<a class="page-scroll" href="#myModal2" >LOGIN</a>
-								</li>
-							</ul>
+					<div class="navWrap">
+						<div class="container">
+							<div class="navbar-header page-scroll">
+								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+									<span class="sr-only"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<h1>
+									<a class="navbar-brand" href="index.html">
+										Let's
+										<span>Party</span>
+									</a>
+								</h1>					
+							</div>
+							<!--导航栏-->
+							<div class="collapse navbar-collapse navbar-ex1-collapse">
+								<ul class="nav navbar-nav navbar-right">
+									<li class="active navItem">
+										<a class="page-scroll" href="#home">Home</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#services">Services</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#staff">Our staff</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#gallery">Gallery</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#prices">Prices</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#blog">Blog</a>
+									</li>
+									<li class="navItem">
+										<a class="page-scroll" href="#contact">Contact</a>
+									</li>
+									<li class="w3ls-navlog">
+										<a class="page-scroll" href="javascript:;" >LOGIN</a>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</nav>
@@ -75,38 +79,42 @@
 					<div class="agileits-timer">
 						<div class="clock">
 							<div class="column">
-								<div>
-									<img class="nowHour1" src="img/0.png" />
+								<div class="now">
+									<img src="img/0.png" />
 									<img src="img/0.png" />
 								</div>
-								<div>
-									<img class="nowHour2" src="img/0.png"  />
+								<div class="current">
+									<img src="img/0.png"  />
 									<img src="img/0.png" />
 								</div>			
 							</div>
 							<div class="column">
-								<div>
-									<img class="nowMin1" src="img/0.png"  />
+								<div class="now">
+									<img src="img/0.png"  />
 									<img src="img/0.png"  />
 								</div>
-								<div>
+								<div class="current">
 									<img class="nowMin2" src="img/0.png" />
 									<img src="img/0.png"  />
 								</div>			
 							</div>
 							<div class="column">
-								<div>
-									<img class="nowSec1" src="img/0.png"  />
+								<div class="now">
+									<img src="img/0.png"  />
 									<img src="img/0.png"  />
 								</div>
-								<div>
+								<div class="current">
 									<img class="nowSec2" src="img/0.png" />
 									<img src="img/0.png" />
 								</div>			
 							</div>
 						</div>
 					</div>
-					<a class="wthree-btn" href="javascript:;">Get Your Entry Ticket </a>
+					<a class="wthree-btn entryBtn" href="javascript:;">
+						Get Your Entry Ticket
+						<span class="left"></span>
+						<span class="right"></span>
+					</a>
 				</div>
 				
 			</div>
@@ -211,19 +219,19 @@
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
 							<div class="w3ls-effect11">
 								<img src="img/mark soghia.jpg" />
-								<div class="staff-text">
+								<div class="staff-text pull-left">
 									<div class="social-icons">
 										<ul class="list-unstyled">
 											<li class="pull-left">
-												<a href="javascript:;" class="facebook center-block">							
+												<a href="#home" class="facebook center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="google center-block">							
+												<a href="#home" class="google center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="twitter center-block">							
+												<a href="#home" class="twitter center-block">							
 												</a>
 											</li>
 											<li class="clearfix"></li>
@@ -234,24 +242,25 @@
 									</h5>
 									<p class="text-center">Manager</p>
 								</div>
+								<div class="clearfix"></div>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
 							<div class="w3ls-effect11">
 								<img src="img/henry ken.jpg" />
-								<div class="staff-text">
+								<div class="staff-text pull-left">
 									<div class="social-icons">
 										<ul class="list-unstyled">
 											<li class="pull-left">
-												<a href="javascript:;" class="facebook center-block">							
+												<a href="#home" class="facebook center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="google center-block">							
+												<a href="#home" class="google center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="twitter center-block">							
+												<a href="#home" class="twitter center-block">							
 												</a>
 											</li>
 											<li class="clearfix"></li>
@@ -262,6 +271,7 @@
 									</h5>
 									<p class="text-center">Event-Manager</p>
 								</div>
+								<div class="clearfix"></div>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
@@ -271,15 +281,15 @@
 									<div class="social-icons">
 										<ul class="list-unstyled">
 											<li class="pull-left">
-												<a href="javascript:;" class="facebook center-block">							
+												<a href="#home" class="facebook center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="google center-block">							
+												<a href="#home" class="google center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="twitter center-block">							
+												<a href="#home" class="twitter center-block">							
 												</a>
 											</li>
 											<li class="clearfix"></li>
@@ -290,6 +300,7 @@
 									</h5>
 									<p class="text-center">Team Manager</p>
 								</div>
+								<div class="clearfix"></div>
 							</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
@@ -299,15 +310,15 @@
 									<div class="social-icons">
 										<ul class="list-unstyled">
 											<li class="pull-left">
-												<a href="javascript:;" class="facebook center-block">							
+												<a href="#home" class="facebook center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="google center-block">							
+												<a href="#home" class="google center-block">							
 												</a>
 											</li>
 											<li class="pull-left">
-												<a href="javascript:;" class="twitter center-block">							
+												<a href="#home" class="twitter center-block">							
 												</a>
 											</li>
 											<li class="clearfix"></li>
@@ -318,6 +329,7 @@
 									</h5>
 									<p class="text-center">CEO& Founder</p>
 								</div>
+								<div class="clearfix"></div>
 							</div>
 						</div>
 					</div>
@@ -706,17 +718,182 @@
 			<!--subscribe start-->
 			<div class="subscribe">
 				<div class="subscribe-bgout">
-					<!--<div class="subscribe-bg"></div>-->
+					<div class="subscribe-bg"></div>
 				</div>
 				<div class="subscribe-contain">
 					<div class="container">
-						<div class="col-sm-6 pull-left">
-							
+						<div class="col-sm-6 pull-left subscribe-left">
+							<h3 class="w3stitle text-uppercase">
+								Subscribe 
+								<span>
+									 Newsletter
+								</span>
+							</h3>
+							<p>Sed tincidunt lorem sed velit lacus ornare 
+								<a href="">Privacy policy</a>
+							</p>
+						</div>
+						<div class="col-sm-6 pull-right subscribe-right">
+							<form action="#" method="post">
+								<input class="pull-left email" type="email" name="email" placeholder="Enter your email..."/>
+								<input class="pull-left submit" type="submit" value="Subscribe" />
+								<div class="clearfix"></div>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!--subscribe end-->
+			<!--contact start-->
+			<div id="contact" class="contact">
+				<div class="container">
+					<h3 class="w3stitle text-uppercase">
+						Contact 
+						<span>
+							 us
+						</span>
+					</h3>
+					<div class="contact-contain row">
+						<div class="col-md-6 col-sm-6 contact-left">
+							<div class="contact-grid">
+								<h4>
+									DROP US A LINE 
+								</h4>
+								<form action="#" method="post" class="form-group">
+									<label for="name" class="sr-only"></label>
+									<input id="name" type="text" name="name" placeholder="Name" class="form-control" />
+									<label for="email" class="sr-only"></label>
+									<input dir="email" type="email" name="email" placeholder="Email" class="form-control" />
+									<label for="phoneNum" class="sr-only"></label>
+									<input id="phoneNum" type="number" name="phoneNum" placeholder="Phone Number" class="form-control" />
+									
+									<textarea name="message" placeholder="Message..." required class="form-control"></textarea>
+									<input type="submit" name="submit" value="submit" class="form-control btn" />
+								</form>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 contact-right">
+							<h6 class="text-uppercase">
+								<span>Sed interdum </span>
+								interdum accumsan nec purus ac orci finibus facilisis.
+							</h6>
+							<div class="address-row row">
+								<div class="col-xs-2 pull-left text-center">
+									<span class="glyphicon glyphicon-home center-block"></span>
+								</div>
+								<div class="col-xs-10 pull-right">
+									<h5>Visit Us</h5>
+									<p>Bmr St, Canada, New York, USA</p>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="address-row row">
+								<div class="col-xs-2 pull-left text-center">
+									<span class="glyphicon glyphicon-envelope center-block"></span>
+								</div>
+								<div class="col-xs-10 pull-right">
+									<h5>Mail Us</h5>
+									<a>mail@example.com</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="address-row row">
+								<div class="col-xs-2 pull-left text-center">
+									<span class="glyphicon glyphicon-phone center-block"></span>
+								</div>
+								<div class="col-xs-10 pull-right">
+									<h5>Call  Us</h5>
+									<p>+01 222 333 4444</p>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="map">
+								<iframe src>
+									
+								</iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--contact end-->
+			<!--feature start-->
+			<div class="feature">
+				<div class="container">
+					<div class="col-md-3 col-xs-6">
+						<div class="col-xs-4 pull-left text-center feature-left">
+							<span class="glyphicon glyphicon-map-marker"></span>
+						</div>
+						<div class="col-xs-8 pull-left feature-right">
+							<p class="text-uppercase">location</p>
+							<h5 class="text-uppercase">
+								LONDON, UK
+							</h5>
+						</div>
+					</div>
+					<div class="col-md-3 col-xs-6">
+						<div class="col-xs-4 pull-left text-center feature-left">
+							<span class="glyphicon glyphicon glyphicon-credit-card"></span>
+						</div>
+						<div class="col-xs-8 pull-left feature-right">
+							<p class="text-uppercase">REMAINING</p>
+							<h5 class="text-uppercase">
+								REMAINING
+							</h5>
+						</div>
+					</div>
+					<div class="col-md-3 col-xs-6">
+						<div class="col-xs-4 pull-left text-center feature-left">
+							<span class="glyphicon glyphicon-briefcase"></span>
+						</div>
+						<div class="col-xs-8 pull-left feature-right">
+							<p class="text-uppercase">EVENTS</p>
+							<h5 class="text-uppercase">
+								20+ Events
+							</h5>
+						</div>
+					</div>
+					<div class="col-md-3 col-xs-6">
+						<div class="col-xs-4 pull-left text-center feature-left">
+							<span class="glyphicon glyphicon-user"></span>
+						</div>
+						<div class="col-xs-8 pull-left feature-right">
+							<p class="text-uppercase">CUSTOMERS</p>
+							<h5 class="text-uppercase">
+								12,000+
+							</h5>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--feature end-->
+			<!--copy right start-->
+			<div class="copyright">
+				<div class="container">
+					<div class="footerIco">
+						<ul>
+							<li class="pull-left">
+								<a href="" class="facebook"></a>
+							</li>
+							<li class="pull-left">
+								<a href="" class="google"></a>
+							</li>
+							<li class="pull-left">
+								<a href="" class="twitter"></a>
+							</li>
+							<li class="pull-left">
+								<a href="" class="dribbble"></a>
+							</li>
+							<li class="clearfix"></li>
+						</ul>
+					</div>
+					<p class="text-center">
+						Copyright © 2017.Company name All rights reserved.
+					</p>
+				</div>
+			</div>
+			<!--copy right end-->
+			
 		</div>
 	</body>
 </html>

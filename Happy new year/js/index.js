@@ -38,6 +38,8 @@ defaults.events=function(){
 	service.events();
 	//gallery部分相关的事件
 	gallery.events();
+	//prices部分相关的事件
+	prices.events();
 }
 //banner区域
 var banner={};
@@ -241,6 +243,7 @@ var staff={};
 var gallery={};
 gallery.events=function(){
 	var index=null;
+	var n=0;
 	$("#gallery .gallery-grids").each(function(index,item){
 	
 		var _index=index;
@@ -248,7 +251,7 @@ gallery.events=function(){
 	})
 	$("#gallery .glyphicon").on('click',function(){
 		var _this=$(this)
-		$(".gallery-mask").show();
+		$(".gallery-mask").fadeIn();
 		$(".lightbox").css({
 			"top":$(window).scrollTop()+100
 		})
@@ -257,7 +260,29 @@ gallery.events=function(){
 		$(".lb-outerContainer img").attr("src","img/g"+(n+1)+".jpg")
 		$(".lb-details").find("em:first-child").html((n+1))
 	})
-	
+	//点击关闭按钮。隐藏弹出框
+	$(".lb-closeContainer a").on("click",function(){
+		$(".gallery-mask").fadeOut();
+		
+	})
+	//轮播图部分，点击下一页	
+	$(".lightbox .lightNext").on("click",function(){
+		n++;
+		n>=$(".gallery-grids").length-1?n=$(".gallery-grids").length-1:n=n;
+		$(".lb-outerContainer img").attr("src","img/g"+(n+1)+".jpg")
+	})
+	//轮播图，点击上一页
+	$(".lightbox .lightPre").on("click",function(){
+		n--;
+		n<=0?n=0:n=n;
+		$(".lb-outerContainer img").attr("src","img/g"+(n+1)+".jpg")
+	})
+}
+var prices={};
+prices.events=function(){
+	$(".pricesw3-agileits .pricing-bottom .btn").on("click",function(){
+		new bookDialog()
+	})
 }
 //数据对象
 var data={};
@@ -281,6 +306,178 @@ tools.getTime=function(){
 		second:seconds
 	}
 }
+//book的弹窗
+function bookDialog(options){
+	this.diaDiv=null;
+	options=options||{};
+	//如果options不是一个对象，报错
+	if(!(options instanceof Object)){
+		throw new Error("函数参数必须为一个对象类型")
+	}
+	//设置一个默认的参数对象
+	this.default={
+		content:"这是默认的弹窗内容",
+		width:null,
+		height:null,
+		left:"center",
+		top:"center",
+		okFn:function(){},
+		resetFn:function(){},
+		closeFn:function(){}		
+	}
+	//将传入的属性覆盖掉默认的default
+	for(var attr in options){
+		if(options.hasOwnProperty(attr)){
+			this.default[attr]=options[attr]
+		}
+	}
+	this.init();
+}
+bookDialog.prototype={
+	init(){
+		//显示遮罩
+		document.body.appendChild(this.creatMaskHtml());
+		//显示弹窗
+		document.body.appendChild(this.creatPopHtml());	
+		this.diaDiv.style.zIndex = 100;
+	},
+	//显示弹窗位置
+	pos(){
+		
+	},
+	size(){
+		if(this.default.width==null){
+			return
+		}else{
+			this.diaDiv.style.width=this.default.width+"px";
+		}
+		
+		if(this.default.height==null){
+			return
+		}else{
+			this.diaDiv.style.height=this.default.height+"px"	;
+		}
+	},
+	creatMaskHtml(){
+		this.mask=document.createElement("div");
+		this.mask.className="mask";
+		this.mask.style.cssText = "width:100%;height:100%;background:#000;opacity: .5;position:fixed;left:0;top:0;z-index:99;";
+		return this.mask;
+	},
+	creatPopHtml(){
+		this.diaDiv=document.createElement("div")
+		this.diaDiv.className="bookDialog";
+		this.diaDiv.position="absolute";
+		var diaHtml=`
+				<div class="contentPop">
+					<h4 class="text-left">
+						Account Info
+					</h4>
+					<form action="#" method="post">
+						<ul>
+							<li class="pull-left">
+								<input class="text" type="text" name="firstName" placeholder="First Name" />
+							</li>
+							<li class="pull-left">
+								<input class="text" type="text" name="lastName" placeholder="Last Name" />
+							</li>
+							<div class="clearfix"></div>
+						</ul>
+						<ul>
+							<li class="pull-left">
+								<input class="text email" type="email" name="email" placeholder="Email" />
+							</li>
+							<li class="pull-left">
+								<input class="text phoneNum" type="number" name="number" placeholder="Phone Number" />
+							</li>
+							<div class="clearfix"></div>
+						</ul>
+						<ul>
+							<li class="pull-left select">
+								<label>No of Tickets</label>
+								<select class="text">
+									<option value="1">1 ticket</option>
+									<option value="2">2 tickets</option>
+									<option value="3">3 tickets</option>
+									<option value="4">4 tickets</option>
+									<option value="5">5 tickets</option>
+									<option value="6">more</option>
+								</select>
+							</li>
+							<li class="pull-left select">
+								<label>Package</label>
+								<select class="text">
+									<option value="1">Classic</option>
+									<option value="2">Elite</option>
+									<option value="3">Couple</option>
+									<option value="4">Special</option>
+									
+								</select>
+							</li>
+							<div class="clearfix"></div>
+						</ul>
+						<ul class="address-row">
+							<li>
+								<input class="text address" type="text" placeholder="Address"/>
+							</li>
+						</ul>
+					</form>
+					<h4 class="text-left">
+						Payment Method
+					</h4>
+					<ul class="payment-type">
+						<li class="pull-left text-left">
+							<input type="radio" id="payal" value="payal" name="payment-method"/>
+							<a href="javascript:;" class="visa"></a>
+						</li>
+						<li class="pull-left text-left">
+							<input type="radio" id="card" value="card" name="payment-method"/>
+							<a href="javascript:;" class="card"></a>
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+					<ul>
+						<li class="pull-left">
+							<input type="text" class="text" placeholder="Card Name" />
+						</li>
+						<li class="pull-left">
+							<input type="text" class="text" placeholder="Name on card" />
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+					<ul>
+						<li class="pull-left">
+							<input type="text" class="text" placeholder="Expiration Date" />
+						</li>
+						<li class="pull-left">
+							<input type="text" class="text" placeholder="Security Code" />
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+					<ul class="btn-row">						
+						<li class="pull-right">
+							<input class="process" type="button" value="Process order" />
+						</li>
+						<li class="pull-right">
+							<input class="reset" type="button" value="Reset" />
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+				</div>
+				<a href="javascript:;" class="closeBtn">
+					<span>&times;</span>
+				</a>
+				`;
+		this.diaDiv.innerHTML = diaHtml;
+		this.ok=$(this.diaDiv).find(".process");
+		this.resets=$(this.diaDiv).find(".reset");
+		this.close=$(this.diaDiv).find(".closeBtn");
+		return  this.diaDiv;
+	}
+	
+}
+
+
 $(document).ready(function(){
 	defaults.init()
 })

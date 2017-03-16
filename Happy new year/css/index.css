@@ -2,6 +2,11 @@ body,h1,h2,h3,h4,h5,h6,p{
 	margin: 0;
 	padding: 0;
 }
+input{
+	margin: 0;
+	padding: 0;
+	
+}
 ul{
 	margin: 0;
 	padding: 0;
@@ -650,7 +655,7 @@ h1 a.navbar-brand{
 	padding: 1.2em 0;
 	text-align: center;
 	width: 100%;
-	border-radius: 5px 5px 0 0;
+	border-radius: 5px;
 }
 .pricing .pricing-top h3{
 	color: #fff;
@@ -667,6 +672,10 @@ h1 a.navbar-brand{
 	padding: 28px;
 	background: rgba(0,0,0,0.4);
 	border-radius: 0 0 5px 5px;
+}
+.pricing .line{
+	width:0;
+	height: 4px;
 }
 .pricing .pricing-bottom p{
 	text-align: center;
@@ -690,6 +699,9 @@ h1 a.navbar-brand{
 .pricingOne .pricing-bottom .btn{
 	background-color: #03A9F4;
 }
+.pricingOne .line{
+	background-color: #03A9F4;
+}
 .pricingOne .pricing-top{
 	background-color: #03A9F4;
 }
@@ -699,17 +711,40 @@ h1 a.navbar-brand{
 .pricingTwo .pricing-bottom .btn{
 	background-color: #8BC34A;
 }
+.pricingTwo .line{
+	background-color:#8BC34A ;
+}
 .pricingThree .pricing-top{
 	background-color: #792ffd;
 }
 .pricingThree .pricing-bottom .btn{
 	background-color: #792ffd;
 }
+.pricingThree .line{
+	background-color:#792ffd ;
+}
 .pricingFour .pricing-top{
 	background-color: #FF5722;
 }
 .pricingFour .pricing-bottom .btn{
 	background-color: #FF5722;
+}
+.pricingFour .line{
+	background-color:#FF5722 ;
+}
+/*priceing hover的时候的放大*/
+.pricing{
+	transition:1s;
+}
+.pricing .line{
+	transition:0.6s;
+	border-radius: 10px;
+}
+.pricing:hover{
+	transform: scale(1.08);
+}
+.pricing:hover .line{
+	width: 100%;
 }
 .teamSay{
 	position: relative;	
@@ -1099,6 +1134,139 @@ h1 a.navbar-brand{
 	top: 2px;
 	z-index: 110;
 	opacity: 1;
+}
+/*book now 弹窗部分*/
+.bookDialog{
+	position:absolute;
+	left: 0;
+	top: 0;
+	background-color: #fff;
+	padding: 14px;
+	border: 10px solid #bb3756;
+	margin: 40px auto;
+	text-align:center;
+	max-width: 629px;
+	width: 616px;
+}
+.bookDialog .contentPop{
+	padding:0 3%;
+	margin-top: 25px;
+}
+.bookDialog h4{
+	border-top: 1px solid lightgray;
+	padding: 14px 0;
+	color:#bb3756 ;
+	font-size: 2em;
+}
+.bookDialog .contentPop ul{
+	margin-bottom: 14px;
+}
+.bookDialog .contentPop ul li:first-of-type{
+	margin-right: 1.5em;
+	
+}
+.bookDialog .contentPop li.pull-left{
+	width: 256px;
+	height: 40px;
+}
+.bookDialog .contentPop li.select{
+	height: 50px;
+}
+.bookDialog .contentPop .text{
+	width: 256px;
+	height: 40px;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+.bookDialog .contentPop label{
+	display: block;
+	color: #999;
+	text-align: left;
+}
+.bookDialog .contentPop .address-row{
+	width: 100%;
+	margin-bottom: 36px;
+}
+.bookDialog .contentPop .address{
+	width: 100%;
+}
+.bookDialog .contentPop select.text{
+	height: 18px;
+	color: #999;
+	background-color: #fff;
+}
+.btn-row{
+	margin-top: 22px;
+}
+.btn-row input{
+	padding: 0.6em 2em;
+	border:1px solid;
+	cursor: pointer;
+	font-size: 1em;
+	display: block;
+	transition: all 0.5s;
+	color: #fff;
+}
+.process{
+	background-color: #03a9f4;
+}
+.process:hover{
+	background-color: #fff;
+	border-color:#03a9f4;
+	color:#03a9f4;
+}
+.reset{
+	background-color: #bb3756;
+}
+.reset:hover{
+	background-color: #fff;
+	border-color:#bb3756;
+	color:#bb3756;
+}
+.btn-row .pull-right:first-of-type{
+	margin-left: 8px;
+	margin-right: 13px !important;
+}
+.payment-type{
+	margin: 10px 0;
+}
+.payment-type li{
+	width: 64px !important;
+}
+.payment-type .visa{
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url(../img/icon.png) no-repeat;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+.payment-type .card{
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url(../img/icon.png) no-repeat;
+	background-position: -40px 0;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+.bookDialog .close{
+	width: 40px;
+	height: 40px;
+	display: block;
+	background-color:#bb3756 ;
+	color: #fff;
+}
+.closeBtn{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 40px;
+	height: 40px;
+	background-color: #bb3756;
+	color: #fff;
+	line-height: 40px;
+	text-align: center;
 }
 @media (max-width: 1280px){
 	.banner-text p{

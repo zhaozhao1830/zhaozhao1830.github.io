@@ -17,6 +17,7 @@ defaults.init=function(){
 	})	
 	banner.init();
 	banner.timer();
+	prices.init();
 	this.events();
 }
 defaults.events=function(){
@@ -40,6 +41,10 @@ defaults.events=function(){
 	gallery.events();
 	//prices部分相关的事件
 	prices.events();
+	blog.events();
+	//contact部分的相关的事件
+	contact.events();
+
 }
 //banner区域
 var banner={};
@@ -161,18 +166,22 @@ banner.events=function(){
 		})
 	})
 	//get your ticket区域
-	$("#home .wthree-btn").on("mouseover",function(){
+	$("#home .wthree-btn").on("mouseenter",function(){
 		var _this=$(this)
+		$(this).find(".left").stop(true)
 		$(this).find(".left").animate({
 			"left":110
 		},300,function(){
 			_this.css({"background":"#bb3756"})
 		})
+		$(this).find(".right").stop(true)
 		$(this).find(".right").animate({
 			"right":110
 		},300)
 	})
-	$("#home .wthree-btn").on("mouseout",function(){
+	$("#home .wthree-btn").on("mouseleave",function(){
+		$(this).find(".left").stop(true)
+		$(this).find(".right").stop(true)
 		$(this).find(".left").css({"left":-20})
 		$(this).find(".right").css({"right":-20})
 		$(this).css({"background":"none"})
@@ -279,9 +288,154 @@ gallery.events=function(){
 	})
 }
 var prices={};
+prices.n=0;
+
+prices.init=function(){
+	var w=$(".flexslider .slider-item").width();
+	var n=$(".flexslider .slider-item").length;
+	$(".flexslider .slider").css({
+		"width":w*n
+	})
+}
 prices.events=function(){
+	var _this=this;
 	$(".pricesw3-agileits .pricing-bottom .btn").on("click",function(){
 		new bookDialog()
+	})
+	
+	$(".flex-direction-nav").find(".next").on("click",function(){
+		var len=$(".slider-item").width();
+		var l=parseInt($(".slider").css("left"));
+		if(l===-2736){
+			_this.n=0;
+			$(".slider").css("left",0);
+			l=parseInt($(".slider").css("left"));
+		}
+	
+		$(".slider:not(:animated)").animate({
+			"left":l-len
+		},400,function(){
+			_this.n++;
+			if(_this.n===3){
+				_this.n=0;
+				$(".slider").css("left",0);
+			}
+			
+			
+		})
+
+		$(".flex-control-nav li").removeClass("active")
+		$(".flex-control-nav li").eq((_this.n+1)%3).addClass("active")
+							
+	})
+	$(".flex-direction-nav").find(".pre").on("click",function(){
+		var len=$(".slider-item").width();
+		var l=parseInt($(".slider").css("left"));
+		if(l===0){
+			_this.n=3;
+			$(".slider").css("left",-len*3);
+			l=parseInt($(".slider").css("left"))
+		}
+		$(".slider:not(:animated)").animate({
+			"left":l+len
+		},400,function(){
+			_this.n--
+			if(_this.n===0){
+				_this.n=3;
+				$(".slider").css("left",-len*3);
+			}
+			
+			
+		})
+
+		$(".flex-control-nav li").removeClass("active")
+		$(".flex-control-nav li").eq((_this.n-1)%3).addClass("active")
+							
+	})
+	//点击圆点按钮
+	$(".flex-control-nav li").each(function(index,item){
+		$(this).attr("data-index",index)
+	})
+
+	$(".flex-control-nav li").on("click","a",function(){
+		var len=$(".slider-item").width();
+		_this.n=Number($(this).closest("li").attr("data-index"));
+		$(".flex-control-nav li").removeClass("active")
+		$(this).closest("li").addClass("active")
+		$(".slider").animate({
+			"left":-len*_this.n
+		},300);
+	})
+			
+	
+}
+var blog={};
+blog.events=function(){
+	//点击subscribed的时候，判断input的value是不是空的
+	//取消浏览器默认样式
+	$(".subscribe .submit").on("click",function(ev){
+		ev.preventDefault()
+	})
+	$(".subscribe .submit").on("click",function(){
+		var _this=$(this);
+		var val=$(".subscribe .email").val();
+		var re=/^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/;
+		console.log(re.test(val))
+		if(val===""){
+			$(".tips").show()
+			$(".tips").css({
+				"top":_this.offset().top+_this.height()+40,
+				"left":_this.offset().left-200,
+				"z-index":"102"
+			})
+			setTimeout(function(){
+				$(".tips").hide()
+			},2000)
+		}else if(!re.test(val)){
+			$(".tips").show();
+			$(".tips").css({					
+				"top":_this.offset().top+_this.height()+40,
+				"left":_this.offset().left-200,
+				"z-index":"102"
+			})
+			$(".tips").find(".tipsText").html("请书写正确的邮箱代码")
+			setTimeout(function(){
+				$(".tips").hide()
+			},2000)
+		}
+	})
+
+}	
+
+var contact={};
+contact.events=function(){
+	//点击contact us下面的submit
+	$(".contact .btn").on("click",function(ev){
+		ev.preventDefault();
+		var contact=document.getElementById("contact");
+
+		var formContrl=contact.getElementsByClassName("form-control");
+
+		for(var i=0;i<formContrl.length;i++){
+			console.log($(formContrl[i]).offset().top)
+			var obj=$(formContrl[i]);
+			var t=obj.offset().top;
+			var l=obj.offset().left;
+			var h=obj.height();
+			if(formContrl[i].value.trim()===""){
+				$(".tips").show()
+				$(".tips").css({
+					"top":t+h+30,
+					"left":l,
+					"z-index":"102"
+				})
+				setTimeout(function(){
+					$(".tips").hide()
+				},2000)
+				break
+			}
+		}
+
 	})
 }
 //数据对象
@@ -319,8 +473,6 @@ function bookDialog(options){
 		content:"这是默认的弹窗内容",
 		width:null,
 		height:null,
-		left:"center",
-		top:"center",
 		okFn:function(){},
 		resetFn:function(){},
 		closeFn:function(){}		
@@ -332,6 +484,7 @@ function bookDialog(options){
 		}
 	}
 	this.init();
+	
 }
 bookDialog.prototype={
 	init(){
@@ -340,10 +493,59 @@ bookDialog.prototype={
 		//显示弹窗
 		document.body.appendChild(this.creatPopHtml());	
 		this.diaDiv.style.zIndex = 100;
+		this.pos();
+		this.okFn();
+		this.resetFn();
+		this.closeFn();
 	},
 	//显示弹窗位置
 	pos(){
-		
+		//获取当前页面的滚动距离
+		var t=$(window).scrollTop();
+		//让弹框居中
+		$(this.diaDiv).css({
+			 "top":t,
+			"left":"50%",
+			"margin-left":-$(this.diaDiv).width()/2
+		})
+	},
+	okFn(){
+		$(".bookDialog .process").on("click",function(){
+			//每个表单内容不能为空，如果为空，弹出提示框
+			var timer=null;
+			var bookDialog=$(".bookDialog").get(0);
+			var texts=bookDialog.getElementsByClassName("text");
+			for(var i=0;i<texts.length;i++){
+				if(texts[i].value.trim()===""){
+					$(".tips").show()
+					$(".tips").css({
+						"top":$(texts[i]).offset().top+$(texts[i]).height()+10,
+						"left":$(texts[i]).offset().left,
+						"z-index":"102"
+					})
+//					clearTimeout(timer)
+					setTimeout(function(){
+						$(".tips").hide()
+					},500)
+					break;
+				}
+			}			
+		})
+	},
+	resetFn(){
+		$(".bookDialog .reset").on("click",function(){
+			var bookDialog=$(".bookDialog").get(0);
+			var texts=bookDialog.getElementsByClassName("text");
+			for(var i=0;i<texts.length;i++){
+				texts[i].value=""
+			}
+		})
+	},
+	closeFn(){
+		$(".bookDialog .closeBtn").on("click",function(){
+			$(".mask").remove()
+			$(".bookDialog").remove()
+		})
 	},
 	size(){
 		if(this.default.width==null){
@@ -427,7 +629,7 @@ bookDialog.prototype={
 					</h4>
 					<ul class="payment-type">
 						<li class="pull-left text-left">
-							<input type="radio" id="payal" value="payal" name="payment-method"/>
+							<input type="radio" id="payal" value="payal" name="payment-method" checked/>
 							<a href="javascript:;" class="visa"></a>
 						</li>
 						<li class="pull-left text-left">
@@ -467,6 +669,7 @@ bookDialog.prototype={
 				<a href="javascript:;" class="closeBtn">
 					<span>&times;</span>
 				</a>
+				
 				`;
 		this.diaDiv.innerHTML = diaHtml;
 		this.ok=$(this.diaDiv).find(".process");

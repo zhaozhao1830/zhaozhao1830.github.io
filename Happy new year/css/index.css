@@ -5,7 +5,8 @@ body,h1,h2,h3,h4,h5,h6,p{
 input{
 	margin: 0;
 	padding: 0;
-	
+	border: 0;
+	outline: none;
 }
 ul{
 	margin: 0;
@@ -45,6 +46,7 @@ h1,h2,h3,h4,h5,h6{
 nav.navbar.navbar-default.navbar-fixed-top{
 	background: none;
 	border: none;
+	z-index: 200;
 	
 }
 .navbar-default .nav.navbar-nav li a{
@@ -146,6 +148,7 @@ h1 a.navbar-brand{
     font-family: 'Trochut', cursive;
     letter-spacing: 1px;
 	width:253px;
+	background: none;
 }
 .wthree-btn .left,.banner-text .wthree-btn .right{
 	position: absolute;
@@ -158,6 +161,7 @@ h1 a.navbar-brand{
     z-index: -1;
     margin-top: -10px;
 }
+
 .wthree-btn .left{
 	left: -20px;
 }
@@ -763,6 +767,7 @@ h1 a.navbar-brand{
 	margin: 0 auto 50px;
 	
 }
+
 .teamSay .slider-item{
 	width: 912px;
 }
@@ -793,6 +798,10 @@ h1 a.navbar-brand{
 	padding: 0 390px;
 	display: flex;
 	justify-content: space-around;
+	position: relative;
+}
+.slider{
+	position: relative;
 }
 .teamSay .flex-control-nav .pull-left{
 	width: 15px;
@@ -842,9 +851,17 @@ h1 a.navbar-brand{
 	background-color:#000;
 	display: block;
 	overflow: hidden;
+	transition: 0.5s;
 }
 .blog .blog-info .imgcover img{
 	opacity: 0.5;
+	transition: 0.5s;
+}
+/*blog鼠标移入的时候，图片放大*/
+
+.blog .blog-info:hover .imgcover img{
+	transform: scale(1.2);
+	opacity: 1;
 }
 .blog .blog-info .blog-text{
 	padding: 56px 14px;
@@ -924,6 +941,12 @@ h1 a.navbar-brand{
 	margin-top: 2.2em ;
 	padding-left: 8em;
 }
+.subscribe-contain form:hover .email{
+	border-color: #03A9F4
+}
+.subscribe-contain form:hover .submit{
+	background: #03A9F4
+}
 .subscribe-contain .email{
 	width: 268px;
 	height: 50px;
@@ -932,14 +955,20 @@ h1 a.navbar-brand{
 	background: transparent;
 	border-radius: 50px 0 0 50px;
 	padding: 14px;
+	color: #999;
+	transition: 0.5s;
 }
+
+
 .subscribe-contain .submit{
-	padding: 1em 2.5em;	
+	padding:16px 2.5em;	
+	
 	background-color: #a22c48;
 	border-color: #a22c48;
 	color: #fff;
 	margin-left: -2px;
 	border-radius: 0 50px 50px 0;
+	transition: 0.5s;
 }
 .contact{
 	position: relative;
@@ -1039,6 +1068,7 @@ h1 a.navbar-brand{
 }
 .copyright .footerIco{
 	margin-bottom: 1.5em;
+	margin-top: 20px;
 }
 .copyright .footerIco ul{
 	width: 260px;
@@ -1250,12 +1280,63 @@ h1 a.navbar-brand{
 	margin-left: 10px;
 	vertical-align: middle;
 }
+.bookDialog input{
+	border: 1px solid rgba(0,0,0,0.1);
+}
 .bookDialog .close{
 	width: 40px;
 	height: 40px;
 	display: block;
 	background-color:#bb3756 ;
 	color: #fff;
+}
+ .tips{
+	min-width: 130px;
+	height: 40px;
+	border: 1px solid rgba(0,0,0,0.2);
+	border-radius: 2px;
+	box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	display: none;
+	background-color: #fff;
+}
+.tips .sanjiao{
+	width:0;
+	height: 0;
+	border:10px solid transparent;
+	border-bottom-color: rgba(0,0,0,0.1);
+	position: absolute;
+	left: 10px;
+	top: -19px;
+	
+	
+}
+.tips .sanjiao2 {
+	width:0;
+	height: 0;
+	border:9px solid transparent;
+	border-bottom-color: #fff;
+	position: absolute;
+	left: 11px;
+	top: -16px;	
+}
+.tips .tipsBg{
+	width: 19px;
+	height: 19px;
+	background: url(../img/tips_bg.png) no-repeat;
+	position: absolute;
+	top: 8px;
+	left: 8px;
+}
+.tips .tipsText{
+	display: inline-block;
+	line-height: 40px;
+	padding:0 10px;
+	padding-left: 30px;
+	font-size: 12px;
+	
 }
 .closeBtn{
 	position: absolute;
@@ -1267,6 +1348,29 @@ h1 a.navbar-brand{
 	color: #fff;
 	line-height: 40px;
 	text-align: center;
+}
+/*contact us 右侧内容*/
+.contact-right .glyphicon{
+	transition: 1s;
+}
+.contact-right .address-row:hover .glyphicon{
+	transform: rotateY(720deg);
+}
+/*feature区域的hover*/
+.feature .container .glyphicon{
+	transition: 1s;
+}
+.feature .container>div:hover .glyphicon{
+	transform: scale(1.4);
+	color: #bb3756;
+}
+/*copy right部分*/
+.copyright .footerIco a{
+	transition: 0.2s;
+	border: 1px solid rgba(255,255,255,0.2)
+}
+.copyright .footerIco a:hover{
+	box-shadow: 0 0 18px 6px rgba(255,255,255,0.6)
 }
 @media (max-width: 1280px){
 	.banner-text p{

@@ -7,7 +7,7 @@ defaults.init=function(){
 		})
 	}else{
 		$("#home").css({
-			"height":774,
+			"height":$(window).height(),
 		})
 	}
 	var h=$(document.body).height();
@@ -29,7 +29,7 @@ defaults.events=function(){
 			})
 		}else{
 			$("#home").css({
-				"height":774,
+				"height":$(window).height(),
 			})
 		}
 	})
@@ -681,30 +681,37 @@ bookDialog.prototype={
 }
  //星空部分
  
+//(function(){
+//	
+//})()
 function skyRotate(){
-	//生成20个圆柱的面	
-	var wrap=$(".sky").find(".wrap").get(0);
-	var z=$(".sky").find(".z").get(0);
-	console.log(wrap,z)
-	var w=200;
-	var deg=360/20;
-	var startDeg=360;
-	var R=parseInt(Math.tan((180-deg)/2*Math.PI/180)*(w/2)) - 1;
-	css(z,"translateZ",1000)
-	for (var i = 0; i < 20; i++) {
-		var span=document.createElement("span");
-		span.style.backgroundImage="url(img/s"+(i+1)+".png)";
-		css(span,"rotateY",startDeg)
-		css(span,"translateZ",-R)
+	//生成20个圆柱的面
+var wrap=document.getElementsByClassName("wrap")[0];
+var z=document.getElementsByClassName("z")[0];
+
+var w=2000;
+var deg=360/20;
+var startDeg=360;
+var R=parseInt(Math.tan((180-deg)/2*Math.PI/180)*(w/2))-1;
+css(z,"translateZ",-20000)
+for (var i = 0; i < 20; i++) {
+	var span=document.createElement("span");
+
+	span.style.background="url(img/b"+(i+1)+".png) no-repeat";
+	span.style.backgroundSize="100%"
+	css(span,"rotateY",startDeg)
+	css(span,"translateZ",-R)
+		
 		wrap.appendChild(span);
 		startDeg-=deg
 	}
 }
 
+	
+	
+
+
 $(document).ready(function(){
-	defaults.init();
-
-	//skyRotate()
-
+	defaults.init();	
 })
 

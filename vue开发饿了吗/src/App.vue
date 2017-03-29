@@ -1,28 +1,67 @@
 <template>
   <div id="app">
+    <Vheader :seller="seller"></Vheader>
+    <div class="tab border-1px">
+      <div class="tab-item">
+        <!--router-link还是相当于A标签 -->
+        <router-link to="/goods">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/ratings">评论</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/seller">商家</router-link>
+      </div>
+    </div>
+    <router-view></router-view>
 
-    <hello></hello>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Hello from './components/Hello'
-
-export default {
-  name: 'app',
-  components: {
-    Hello
+  import header from './components/header/header.vue'
+  const ERR_Ok=0
+  export default{
+      data(){
+          return{
+              seller:{}
+          }
+      },
+      created(){
+        this.$http.get("/api/seller").then((res)=>{
+            res=res.body
+           if(res.errno === ERR_Ok){
+              this.seller=res.data
+              console.log(this.seller)
+           }
+        },(res)=>{
+            //error callback
+        })
+      },
+      components:{
+          "Vheader":header
+      }
   }
-}
+
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "common/stylus/mixin.styl";
+#app
+  .tab
+    display:flex
+    width:100%
+    height:40px
+    line-height:40px
+    border-1px(rgba(7,17,27,0.2))
+    .tab-item
+      flex:1
+      text-align:center
+      & > a
+        display:block
+        font-size:14px
+        color:rgb(77,85,93)
+      & .active
+        color:rgb(200,40,40)
+
 </style>

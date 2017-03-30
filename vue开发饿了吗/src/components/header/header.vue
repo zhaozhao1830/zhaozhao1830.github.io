@@ -1,6 +1,6 @@
 <template>
   <div class="header" id="header">
-   <div class="content-wrapper">
+    <div class="content-wrapper">
      <div class="avatar">
        <img width="64" height="64" :src="seller.avatar">
      </div>
@@ -18,7 +18,7 @@
          <span class="text">{{seller.supports[0].description}}</span>
        </div>
      </div>
-     <div class="support-count" v-if="seller.supports">
+     <div class="support-count" v-if="seller.supports" @click="detailEvent">
         <span class="count-num">{{seller.supports.length}}个</span>
         <span class="icon-keyboard_arrow_right"></span>
      </div>
@@ -26,13 +26,39 @@
     <div class="bulletin-wrapper">
       <span class="bulletin-title"></span>
       <span class="bulletin-text">{{seller.bulletin}}</span>
-      <i class="icon-keyboard_arrow_right"></i>
+      <i class="icon-keyboard_arrow_right" @click="detailEvent"></i>
+    </div>
+    <div class="bg">
+      <img :src="seller.avatar" width="100%" height="100%">
+    </div>
+    <div class="detail" v-show="detailShow">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1>{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :starType="48" :score="seller.score"></star>
+          </div>
+          <littleTitle1 :text="'优惠信息'"></littleTitle1>
+          <!--在这个位置传递给自组件信息的时候如果传递的是字符串，需要再包一层引号-->
+          <ul v-if="seller.supports" class="supportArea">
+            <li class="supportItem" v-for="item,index in seller.supports">
+              <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+              <span class="text">{{item.description}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
     </div>
   </div>
 
 </template>
 
 <script type="text/ecmascript-6">
+    import star from '../star/star.vue'
+    import littleTitle1 from "../littleTitle1/littleTitle1.vue"
     export default{
       props:{
          seller:{
@@ -41,8 +67,18 @@
       },
       data(){
           return{
-            classMap:["decrease","discount","special","invoice","guarantee"]
+            classMap:["decrease","discount","special","invoice","guarantee"],
+            detailShow:false
           }
+      },
+      methods:{
+          detailEvent(){
+              this.detailShow=true
+          }
+      },
+      components:{
+        star,
+        littleTitle1
       }
     }
 
@@ -52,8 +88,10 @@
   /*引入样式函数文件，可以实现不同分辨率下，展示不同的图片*/
   /*背景图片通常利用样式函数传入，然后根据不同的class显示不同的图片*/
   #header
+    position:relative
     color:#fff
-    background-color:#999
+    background-color:rgba(7,17,27,0.5)
+    overflow:hidden
     .content-wrapper
       position:relative
       padding:24px 12px 18px 24px
@@ -154,5 +192,77 @@
         right:12px
         top:8px
         font-size:10px
+    .bg
+      position:absolute
+      left:0
+      top:0
+      width:100%
+      height:100%
+      filter:blur(10px)
+      z-index:-1
+    .detail
+      position:fixed
+      left:0
+      right:0
+      top:0
+      bottom:0
+      widtha:100%
+      height:100%
+      background:rgba(7,17,27,0.8)
+      z-index:100
+      overflow:auto
+      .detail-wrapper
+        min-height:100%
+        .detail-main
+          padding-top:64px
+          padding-bottom:64px
+          h1
+            text-align:center
+            line-height:16px
+            font-size:16px
+            font-weight:700
+          .star-wrapper
+            text-align:center
+            padding:20px 0 2px 0
+            margin-bottom:18px
+          .supportArea
+            width:80%
+            margin:0 auto
+            .supportItem
+              padding:0 12px
+              margin-bottom:12px
+              &:last-of-type
+                margin-bottom:0
+              .icon
+                display:inline-block
+                width:16px
+                height:16px
+                vertical-align:top
+                background-size:16px 16px
+
+                &.decrease
+                  bg-image('decrease_2')
+                &.discount
+                  bg-image('discount_2')
+                &.guarantee
+                 bg-image('guarantee_2')
+                &.invoice
+                  bg-image('invoice_2')
+                &.special
+                  bg-image('special_2')
+              .text
+                display:inline-block
+                line-height:14px
+                vertical-align:middle
+                font-size:12px
+
+      .detail-close
+        position:relative
+        margin:-64px auto 0 auto
+        font-size:20px
+        text-align:center
+        .icon-close
+          font-size:30px
+
 
 </style>

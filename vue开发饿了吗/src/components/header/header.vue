@@ -14,7 +14,7 @@
        </div>
        <div class="support" v-if="seller.supports">
          <!--在这个位置需要判断一下seller.supports是否存在，因为代码在执行的时候是异步获取，可能执行这个位置的时候，还没获取到数据，如果不加这个，下面的嗲吗会报错-->
-         <span class="icon" :class="classMap[seller.supports[0].type]"></span>
+         <icon :seller="seller" :size="12" :num="1" :index="'0'"></icon>
          <span class="text">{{seller.supports[0].description}}</span>
        </div>
      </div>
@@ -31,27 +31,33 @@
     <div class="bg">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
-    <div class="detail" v-show="detailShow">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <h1>{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star :starType="48" :score="seller.score"></star>
+    <transition name="fade">
+      <div class="detail" v-show="detailShow">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <h1>{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star :starType="48" :score="seller.score"></star>
+            </div>
+            <littleTitle1 :text="'优惠信息'"></littleTitle1>
+            <!--在这个位置传递给自组件信息的时候如果传递的是字符串，需要再包一层引号-->
+            <ul v-if="seller.supports" class="supportArea">
+              <li class="supportItem" v-for="item,index in seller.supports">
+                <icon :seller="seller" :size="16" :num="2" :index="index"></icon>
+                <span class="text">{{item.description}}</span>
+              </li>
+            </ul>
+            <littleTitle1 :text="'商家公告'"></littleTitle1>
+            <div class="seller-info">
+              <p>{{seller.bulletin}}</p>
+            </div>
           </div>
-          <littleTitle1 :text="'优惠信息'"></littleTitle1>
-          <!--在这个位置传递给自组件信息的时候如果传递的是字符串，需要再包一层引号-->
-          <ul v-if="seller.supports" class="supportArea">
-            <li class="supportItem" v-for="item,index in seller.supports">
-              <span class="icon" :class="classMap[seller.supports[index].type]"></span>
-              <span class="text">{{item.description}}</span>
-            </li>
-          </ul>
+        </div>
+        <div class="detail-close" @click="detailHide">
+          <i class="icon-close"></i>
         </div>
       </div>
-      <div class="detail-close">
-        <i class="icon-close"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 
 </template>
@@ -59,6 +65,7 @@
 <script type="text/ecmascript-6">
     import star from '../star/star.vue'
     import littleTitle1 from "../littleTitle1/littleTitle1.vue"
+    import icon from "../icon/icon.vue"
     export default{
       props:{
          seller:{
@@ -74,11 +81,15 @@
       methods:{
           detailEvent(){
               this.detailShow=true
+          },
+          detailHide(){
+            this.detailShow=false
           }
       },
       components:{
         star,
-        littleTitle1
+        littleTitle1,
+        icon
       }
     }
 
@@ -211,6 +222,7 @@
       background:rgba(7,17,27,0.8)
       z-index:100
       overflow:auto
+      backdrop-filter:blur(5px)
       .detail-wrapper
         min-height:100%
         .detail-main
@@ -227,7 +239,7 @@
             margin-bottom:18px
           .supportArea
             width:80%
-            margin:0 auto
+            margin:10px auto 10px
             .supportItem
               padding:0 12px
               margin-bottom:12px
@@ -255,7 +267,13 @@
                 line-height:14px
                 vertical-align:middle
                 font-size:12px
-
+          .seller-info
+            width:80%
+            margin:0 auto
+            p
+              padding:8px
+              font-size:12px
+              line-height:24px
       .detail-close
         position:relative
         margin:-64px auto 0 auto
@@ -263,6 +281,8 @@
         text-align:center
         .icon-close
           font-size:30px
-
-
+  .fade-enter-acitve,.fade-leave-active
+    transition:opacity .5s
+  .fade-enter,.fade-leave-active
+    opacity:0
 </style>

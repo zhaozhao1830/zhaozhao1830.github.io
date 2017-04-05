@@ -9,6 +9,14 @@ body,html
     display:block
     clear:both
 
+
+.fl
+  float:left
+
+.fr
+  float: right
+
+
 @media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
   .border-1px
     &::after
@@ -17,6 +25,18 @@ body,html
 
 @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)
   .border-1px
+    &::after
+      -webkit-transform:scaleY(0.5)
+      transform : scaleY(0.5)
+
+@media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
+  .borderBT-1px
+    &::after
+      -webkit-transform:scaleY(0.7)
+      transform : scaleY(0.7)
+
+@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)
+  .borderBT-1px
     &::after
       -webkit-transform:scaleY(0.5)
       transform : scaleY(0.5)

@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuwrapper">
       <ul v-show="goods.length">
-        <li v-for="item,index of goods" class="memuItem" :class="{active:activeIndex===index}">
+        <li v-for="(item,index) of goods" class="memuItem" :class="{'active':currentIndex===index}" @touchend="scrollTo(index)">
          <div>
            <!--在这个位置不能达到内容垂直居中的效果，在外面包一层div,可以解决这个问题-->
            <icon v-show="iconShow(item)" :seller="seller" :size="12" :num="3" :index="itemType(item)"></icon>
@@ -12,11 +12,12 @@
       </ul>
     </div>
     <div class="food-wrapper" ref="foodwrapper">
+      <!--在用scroll的时候，实际拖动的是外面层里面的层，里面层需要是一个标签包裹住-->
       <div>
-        <dl v-for="item,index of goods" class="foodList" >
+        <dl v-for="item,index of goods" class="foodList foodList-hook" >
 
           <dt class="listTitle">{{item.name}}</dt>
-          <dd v-for="listItem,listIndex of item.foods" class="item">
+          <dd v-for="listItem,listIndex of item.foods" class="item" @touchstart="itemdetailStart" @touchend="itemDetail(listItem)">
             <div class="listItemLeft">
               <img width="57" height="57" :src="listItem.icon">
             </div>
@@ -32,10 +33,15 @@
                 <span v-show="listItem.oldPrice">¥{{listItem.oldPrice}}</span>
               </div>
             </div>
+            <div class="cartContrl-wrapper">
+              <cartContrl @getPos="getPos" :food="listItem"></cartContrl>
+            </div>
           </dd>
         </dl>
       </div>
     </div>
+    <shopcart ref="shopCart" :selectArray="selectFoods" :deliveryFee="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <food @getPos="getPos" :food="detailItem" ref="foodDetail"></food>
   </div>
 
 </template>
@@ -43,6 +49,9 @@
 <script type="text/ecmascript-6">
     import icon from "../icon/icon.vue"
     import BScroll from "better-scroll"
+    import shopcart from "../shopcart/shopcart.vue"
+    import cartContrl from "../cartContrl/cartContrl.vue"
+    import food from "../food/food.vue"
     const ERR_NO=0
     export default{
       props:["seller"],// 将seller内容传递给子组件
@@ -55,21 +64,33 @@
               itemType(item){
                 return item.type>0?item.type:0
               },
-              scrollHeight:[],
-              scrollPos:0
-
+              listHeight:[],
+              scrollY:0,
+              detailItem:{}
           }
       },
       computed:{
-        activeIndex(){
-            for(var i=0;i<this.scrollHeight.length;i++){
-                console.log(this.scrollPos)
-                if(this.scrollPos>this.scrollHeight[i]){
-                    alert(1)
-                    return i
-                }
-//                return 0
+        currentIndex() {
+          for (let i = 0; i < this.listHeight.length; i++) {
+            let height1 = this.listHeight[i]
+            let height2 = this.listHeight[i + 1]
+            if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+              return i
             }
+          }
+          return 0
+        },
+        selectFoods(){
+            let foods=[]
+            this.goods.forEach((item)=>{
+                item.foods.forEach((food)=>{
+                    if(food.count){
+                      foods.push(food)
+                    }
+                })
+            })
+
+            return foods
         }
       },
       created(){
@@ -81,6 +102,7 @@
 //            console.log(this.goods)
             this.$nextTick(function () {
               this._initScroll()
+              //dom跟新完成之后计算商品区右侧高度
               this._computedScroll()
             })
           }
@@ -88,7 +110,10 @@
         })
       },
       components:{
-          icon
+        icon,
+        shopcart,
+        cartContrl,
+        food
       },
       methods:{
         _initScroll(){
@@ -96,22 +121,53 @@
             this.foodScroll=new BScroll(this.$refs.foodwrapper,{
                 probeType:3
             })
+          var _this=this
           this.foodScroll.on("scroll",function (pos) {
-            this.scrollPos=Math.abs(pos.y)
-//            console.log(this.scrollPos)
+//            在scroll事件中改变了this指向
+            _this.scrollY=Math.abs(Math.round(pos.y))
+
           })
         },
         _computedScroll(){
-            let heights=0;
-            this.scrollHeight.push(heights);
-            let items=this.$refs.foodwrapper.getElementsByClassName("foodList");
+            let heights=0
+            this.listHeight.push(heights)
+            let items=this.$refs.foodwrapper.getElementsByClassName("foodList-hook")
             for(let i=0;i<items.length;i++){
-              heights+=items[i].clientHeight;
+              heights+=items[i].clientHeight
 
-              this.scrollHeight.push(heights)
+              this.listHeight.push(heights)
             }
 
+        },
+        scrollTo(index){
+          let items=this.$refs.foodwrapper.getElementsByClassName("foodList-hook")
+          let el=items[index]
+          this.foodScroll.scrollToElement(el,300)
+        },
+        getPos(target){
+          //子组件通过事件监听的方式，将数据传递给组件，
+          //同时通过这个函数，触发 监听小球方法的函数
+          this._drop(target)
+        },
+        _drop(target){
+            //这个函数是父组件调用子组件小球方法的函数
+          // 这个是为了优化小球运动动画
+          this.$nextTick(()=>{
+            this.$refs.shopCart.drop(target)
+
+          })
+        },
+        itemdetailStart(){
+          this.time=new Date().getTime()
+        },
+        itemDetail(item){
+
+          if(new Date().getTime()-this.time<100){
+            this.detailItem=item
+            this.$refs.foodDetail.showFood()
+          }
         }
+
       }
 
     }
@@ -171,6 +227,7 @@
         background:#f3f5f7
       .item
         display:flex
+        postion:relative
         padding:18px 18px 18px 0
         margin-left:18px
         border-1px(rgba(7,17,27,0.1))
@@ -209,6 +266,10 @@
                 color:rgb(147,153,159)
                 text-decoration:line-through
                 font-size:12px
+        .cartContrl-wrapper
+          position:absolute
+          right:0
+          bottom:12px
 
 
 

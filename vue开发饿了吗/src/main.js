@@ -42,7 +42,7 @@ const app = new Vue({
   components: { App }
 }).$mount('#app')
 
-router.replace('/goods')
+// router.replace('/goods')
 /* eslint-disable no-new */
 // new Vue({
 //   el: '#app',

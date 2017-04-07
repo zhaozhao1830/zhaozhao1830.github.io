@@ -32,8 +32,26 @@
         </div>
         <split v-show="food.ratings"></split>
         <div class="rating-wrapper" v-show="food.ratings">
-          <h3 class="title">商品评价</h3>
-          <ratingSelect :ratings="food.ratings" :select-type=selectType :only-content="false" :desc="desc"></ratingSelect>
+          <div class="rating-top">
+            <h3 class="title">商品评价</h3>
+            <ratingSelect :ratings="food.ratings" :select-type=selectType :only-content=onlyContent :desc="desc" @seleteTypeChange="seleteTypeChange" @onlyContentChange="onlyContentChange"></ratingSelect>
+          </div>
+          <div class="rating-content">
+            <ul v-show="food.ratings && food.ratings.length>0" ref="ratingList">
+              <li v-for="item,index of food.ratings" class="rating-item borderBT-1px" v-show="ratingShow(item.rateType,item.text)">
+                <div class="user">
+                  <span class="username">{{item.username}}</span>
+                  <img class="userImage" :src="item.avatar" width="12" height="12">
+                </div>
+                <div class="time">{{item.rateTime | formatDate}}</div>
+                <div class="text">
+                  <span :class="{'icon-thumb_up':item.rateType===0,'icon-thumb_down':item.rateType===1}"></span>
+                  {{item.text}}
+                </div>
+              </li>
+            </ul>
+            <div v-show="!food.ratings || food.ratings.length<=0" class="no-rating">暂无评价</div>
+          </div>
         </div>
       </div>
     </div>
@@ -47,6 +65,7 @@
     import Vue from "vue"
     import split from "../split/split.vue"
     import ratingSelect from "../ratingSelect/ratingSelect.vue"
+    import {formatDate} from "../../common/js/date.js"
 
     const POSITIVE =0
     const NEGATIVE =1
@@ -65,6 +84,13 @@
               all:"全部",
               positive:"推荐",
               negative:"吐槽"
+            }
+          }
+        },
+        computed:{
+          noRating(){
+            if(this.$refs.ratingList.children.length==0){
+              return true
             }
           }
         },
@@ -95,6 +121,37 @@
           },
           getPos(target){
             this.$emit("getPos",target)
+          },
+          seleteTypeChange(type){
+            this.selectType=type
+//          改变完选择状态之后，要在DOM更新完成之后重新加载better scroll,否则页面高度会出现问题
+            this.$nextTick(()=>{
+              this.scroll.refresh()
+            })
+
+          },
+          onlyContentChange(){
+             this.onlyContent=!this.onlyContent
+//          改变完选择状态之后，要在DOM更新完成之后重新加载better scroll,否则页面高度会出现问题
+              this.$nextTick(()=>{
+                this.scroll.refresh()
+              })
+          },
+          ratingShow(type,text){
+            if(this.onlyContent && !text){
+              return false
+            }
+            if(this.selectType!==2 && this.selectType!==type){
+              return false
+            }
+            return true
+
+          }
+        },
+        filters:{
+          formatDate(time){
+            let date=new Date(time)
+            return formatDate(date,"yyyy-MM-DD  hh:mm")
           }
         },
         components:{
@@ -106,6 +163,7 @@
 
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixin.styl";
   .food
     position:fixed
     top:0
@@ -201,12 +259,53 @@
         font-size:12px
         color:rgb(77,85,93)
     .rating-wrapper
-      padding:18px
-      .title
-        line-height:14px
-        margin-bottom:6px
-        font-size:14px
-        color:rgb(7,17,27)
-
+      padding:18px 0
+      .rating-top
+        padding:0 18px
+        border-bottom:1px solid rgba(7,17,27,0.1)
+        .title
+          line-height:14px
+          margin-bottom:6px
+          font-size:14px
+          color:rgb(7,17,27)
+      .rating-content
+        padding:0 18px
+        .rating-item
+          position:relative
+          padding:16px 0
+          borderBT-1px(rgba(7,17,27,0.1))
+          .user
+            position:absolute
+            right:0
+            top:16px
+            line-height:12px
+            .username
+              vertical-align:middle
+              font-size:10px
+              color:rgb(147,153,159)
+              margin-right:0px
+            .userImage
+              border-radius:50%
+          .time
+            line-height:12px
+            margin-bottom:6px
+            font-size:10px
+            color:rgb(147,153,159)
+          .text
+            line-height:16px
+            font-size:12px
+            color:rgb(7,17,27)
+            .icon-thumb_up,.icon-thumb_down
+              margin-right:4px
+              line-height:16px
+              font-size:12px
+            .icon-thumb_up
+              color:rgb(0,160,220)
+            .icon-thumb_down
+              color:rgb(147,153,159)
+        .no-rating
+          padding:12px 0
+          color:rgb(147,153,159)
+          font-size:12px
 
 </style>

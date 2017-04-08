@@ -200,17 +200,19 @@
           font-weight:700
           position:relative
           margin-top:-1px
+          div
+            border-none()
         div
           display:table-cell
           vertical-align:middle
-
+          border-1px(rgba(7,17,27,0.1))
           .icon
             margin-right:0
             vertical-align:middle
           .text
             width:56px
             font-size:12px
-            border-1px(rgba(7,17,27,0.1))
+
             vertical-align:middle
 
 

@@ -84,7 +84,6 @@
       },
       created(){
         this.$http.get("/api/ratings").then((res)=>{
-          console.log(this.ratings)
           res=res.body
           if(res.errno===0){
             this.ratings=res.data

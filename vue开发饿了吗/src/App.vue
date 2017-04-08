@@ -13,26 +13,37 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
 
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import header from './components/header/header.vue'
+  import {windowUrl} from "./common/js/until"
   const ERR_Ok=0
   export default{
       data(){
           return{
-              seller:{}
+              seller:{
+                id:(()=>{
+                  return windowUrl().id||123
+                })()
+              }
           }
+      },
+      watch:{
+        'seller'(){
+           this.seller.id=windowUrl().id
+        }
       },
       created(){
         this.$http.get("/api/seller").then((res)=>{
             res=res.body
            if(res.errno === ERR_Ok){
-              this.seller=res.data
-              console.log(this.seller)
+              this.seller=Object.assign({},this.seller,res.data)
            }
         },(res)=>{
             //error callback

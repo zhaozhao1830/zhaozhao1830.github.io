@@ -18,7 +18,7 @@ import seller from './components/seller/seller.vue'
 
 Vue.config.productionTip = false;
 
-//全局注册
+//全局注，显示的声明我要使用vue-router
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
